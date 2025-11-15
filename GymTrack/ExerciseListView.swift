@@ -8,54 +8,55 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct ExerciseListView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query(sort: \Exercise.name, order: .forward)
+    var exercises: [Exercise]
 
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(items) { item in
+                ForEach(exercises) { exercise in
                     NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                        Text("\(exercise.name) details")
                     } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        Text("\(exercise.name)")
                     }
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete(perform: deleteExercises)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addItem) {
+                    Button(action: addExercise) {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
             }
         } detail: {
-            Text("Select an item")
+            Text("Select an exercise")
         }
     }
 
-    private func addItem() {
+    private func addExercise() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+            let newExercise = Exercise(name: "New Exercise")
+            modelContext.insert(newExercise)
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteExercises(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(exercises[index])
             }
         }
     }
 }
 
 #Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+    ExerciseListView()
+        .modelContainer(for: Exercise.self, inMemory: true)
 }
