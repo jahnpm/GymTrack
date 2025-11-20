@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct NewExerciseView: View {
+    @AppStorage("defaultUnits") private var defaultUnits: String = "kg"
+    
     @Environment(\.modelContext) private var modelContext
     
     @State private var exerciseName: String = ""
-    @State private var weight: String = ""
-    @State private var repetitions: String = ""
+    @State private var weight: Double = 0.0
+    @State private var repetitions: Int = 0
+    @State private var unit: String = "kg"
     
     @Binding var isPresented: Bool
     
@@ -22,12 +25,21 @@ struct NewExerciseView: View {
                 Section(header: Text("Name")) {
                     TextField("Exercise name", text: $exerciseName)
                 }
-                Section(header: Text("Most recent record")) {
-                    HStack {
-                        TextField("Weight", text: $weight)
-                        Text("kg")
+                Section(header: Text("Unit")) {
+                    Picker("", selection: $unit) {
+                        Text("kg").tag("kg")
+                        Text("lbs").tag("lbs")
                     }
-                    TextField("Repetitions", text: $repetitions)
+                    .pickerStyle(.segmented)
+                }
+                Section(header: Text("Last record")) {
+                    HStack {
+                        TextField("Weight", value: $weight, format: .number)
+                            .keyboardType(.decimalPad)
+                        Text(unit)
+                    }
+                    TextField("Repetitions", value: $repetitions, format: .number)
+                        .keyboardType(.numberPad)
                 }
             }
             .toolbar {
@@ -43,12 +55,16 @@ struct NewExerciseView: View {
                     }
                 }
             }
+            .onAppear {
+                unit = defaultUnits
+            }
         }
     }
     
     private func addExercise() {
         withAnimation {
-            let newExercise = Exercise(name: exerciseName, weight: Double(weight)!, repetitions: Int(repetitions)!)
+            // repetitions is already an Int; pass it directly
+            let newExercise = Exercise(name: exerciseName, weight: weight, repetitions: repetitions)
             modelContext.insert(newExercise)
         }
     }

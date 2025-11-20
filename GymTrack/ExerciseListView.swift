@@ -16,7 +16,7 @@ struct ExerciseListView: View {
     @State private var isPresentingNewExerciseView = false
     
     var body: some View {
-        NavigationSplitView {
+        NavigationStack {
             List {
                 ForEach(exercises) { exercise in
                     NavigationLink {
@@ -39,11 +39,10 @@ struct ExerciseListView: View {
                     }
                 }
             }
+            
             .fullScreenCover(isPresented: $isPresentingNewExerciseView) {
                 NewExerciseView(isPresented: $isPresentingNewExerciseView)
             }
-        } detail: {
-            Text("Select an exercise")
         }
     }
 

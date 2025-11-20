@@ -25,7 +25,7 @@ struct GymTrackApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ExerciseListView()
+            MainView()
         }
         .modelContainer(sharedModelContainer)
     }
