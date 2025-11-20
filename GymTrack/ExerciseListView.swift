@@ -13,6 +13,8 @@ struct ExerciseListView: View {
     @Query(sort: \Exercise.name, order: .forward)
     var exercises: [Exercise]
 
+    @State private var isPresentingNewExerciseView = false
+    
     var body: some View {
         NavigationSplitView {
             List {
@@ -30,20 +32,18 @@ struct ExerciseListView: View {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addExercise) {
-                        Label("Add Item", systemImage: "plus")
+                    Button {
+                        isPresentingNewExerciseView = true
+                    } label: {
+                        Label("Add Exercise", systemImage: "plus")
                     }
                 }
             }
+            .fullScreenCover(isPresented: $isPresentingNewExerciseView) {
+                NewExerciseView(isPresented: $isPresentingNewExerciseView)
+            }
         } detail: {
             Text("Select an exercise")
-        }
-    }
-
-    private func addExercise() {
-        withAnimation {
-            let newExercise = Exercise(name: "New Exercise")
-            modelContext.insert(newExercise)
         }
     }
 
