@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct NewExerciseView: View {
-    @AppStorage("defaultUnits") private var defaultUnits: String = "kg"
-    
+    @AppStorage("defaultWeightUnit") private var defaultWeightUnit: String = "kg"
+
     @Environment(\.modelContext) private var modelContext
     
     @State private var exerciseName: String = ""
+    @State private var weightUnit: String = "kg"
     @State private var weight: Double = 0.0
     @State private var repetitions: Int = 0
-    @State private var unit: String = "kg"
     
     @Binding var isPresented: Bool
     
@@ -26,7 +26,7 @@ struct NewExerciseView: View {
                     TextField("Exercise name", text: $exerciseName)
                 }
                 Section(header: Text("Unit")) {
-                    Picker("", selection: $unit) {
+                    Picker("", selection: $weightUnit) {
                         Text("kg").tag("kg")
                         Text("lbs").tag("lbs")
                     }
@@ -36,7 +36,7 @@ struct NewExerciseView: View {
                     HStack {
                         TextField("Weight", value: $weight, format: .number)
                             .keyboardType(.decimalPad)
-                        Text(unit)
+                        Text(weightUnit)
                     }
                     TextField("Repetitions", value: $repetitions, format: .number)
                         .keyboardType(.numberPad)
@@ -56,7 +56,7 @@ struct NewExerciseView: View {
                 }
             }
             .onAppear {
-                unit = defaultUnits
+                weightUnit = defaultWeightUnit
             }
         }
     }
@@ -64,7 +64,10 @@ struct NewExerciseView: View {
     private func addExercise() {
         withAnimation {
             // repetitions is already an Int; pass it directly
-            let newExercise = Exercise(name: exerciseName, weight: weight, repetitions: repetitions)
+            let newExercise = Exercise(name: exerciseName,
+                                       weightUnit: weightUnit,
+                                       weight: weight,
+                                       repetitions: repetitions)
             modelContext.insert(newExercise)
         }
     }
