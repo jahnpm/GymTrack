@@ -63,7 +63,6 @@ struct NewExerciseView: View {
     
     private func addExercise() {
         withAnimation {
-            // repetitions is already an Int; pass it directly
             let newExercise = Exercise(name: exerciseName,
                                        weightUnit: weightUnit,
                                        weight: weight,
