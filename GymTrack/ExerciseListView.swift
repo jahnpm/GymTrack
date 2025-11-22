@@ -57,5 +57,5 @@ struct ExerciseListView: View {
 
 #Preview {
     ExerciseListView()
-        .modelContainer(for: Exercise.self, inMemory: true)
+        .modelContainer(PreviewData.container)
 }

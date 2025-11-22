@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ExerciseDetailView: View {
     @Bindable var exercise: Exercise
@@ -34,5 +35,7 @@ struct ExerciseDetailView: View {
 }
 
 #Preview {
-    ExerciseDetailView(exercise: Exercise(name: "Bench Press"))
+    let exercise = try! PreviewData.container.mainContext.fetch(FetchDescriptor<Exercise>()).first!
+    ExerciseDetailView(exercise: exercise)
+        .modelContainer(PreviewData.container)
 }

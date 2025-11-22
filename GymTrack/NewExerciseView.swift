@@ -74,4 +74,5 @@ struct NewExerciseView: View {
 
 #Preview {
     NewExerciseView(isPresented: .constant(true))
+        .modelContainer(PreviewData.container)
 }

@@ -24,4 +24,5 @@ struct MainView: View {
 
 #Preview {
     MainView()
+        .modelContainer(PreviewData.container)
 }
