@@ -11,25 +11,27 @@ import SwiftData
 struct ExerciseDetailView: View {
     @Bindable var exercise: Exercise
     
+    @State private var isPresentingAddSetSheet = false
+    
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Last Record")) {
+                Section(header: Text("Last Set")) {
                     VStack {
-                        HStack {
-                            Text("Weight")
-                            Spacer()
-                            Text("\(exercise.lastRecord.weight, specifier: "%.2f") \(exercise.weightUnit)")
-                        }
-                        HStack {
-                            Text("Repetitions")
-                            Spacer()
-                            Text("\(exercise.lastRecord.repetitions)")
-                        }
+                        Text("\(exercise.lastRecord.weight, specifier: "%.2f") \(exercise.weightUnit), \(exercise.lastRecord.repetitions) Reps")
                     }
+                }
+                Section {
+                    Button("Add Set") {
+                        isPresentingAddSetSheet = true
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
             .navigationTitle(exercise.name)
+            .sheet(isPresented: $isPresentingAddSetSheet) {
+                AddSetView(exercise: exercise, isPresented: $isPresentingAddSetSheet)
+            }
         }
     }
 }
