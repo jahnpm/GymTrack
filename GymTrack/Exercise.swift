@@ -6,17 +6,20 @@
 //
 
 import SwiftData
+import Foundation
 
 /// Data structure to store information about a single set performed by the user
-struct SetRecord: Codable {
+struct SetData: Codable {
     let weight: Double
     let repetitions: Int
+    let date: Date
     let oneRepMax: Double
     
     init(weight: Double, repetitions: Int) {
         self.weight = weight
         self.repetitions = repetitions
-        self.oneRepMax = weight * (1 + Double(repetitions) / 30.0)
+        self.date = Date()
+        self.oneRepMax = Helpers.oneRepMax(weight: weight, reps: repetitions)
     }
 }
 
@@ -26,7 +29,7 @@ final class Exercise {
     var name: String
     var weightUnit: String
     var weightSteps: Double
-    var lastRecord: SetRecord
+    var setHistory: [SetData]
     
     init(name: String,
          weightUnit: String = "kg",
@@ -37,7 +40,8 @@ final class Exercise {
         self.name = name
         self.weightUnit = weightUnit
         self.weightSteps = weightSteps
-        self.lastRecord = SetRecord(weight: weight, repetitions: repetitions)
+        let lastSet = SetData(weight: weight, repetitions: repetitions)
+        self.setHistory = [lastSet]
     }
 }
 

@@ -32,7 +32,7 @@ struct NewExerciseView: View {
                     }
                     .pickerStyle(.segmented)
                 }
-                Section(header: Text("Last record")) {
+                Section(header: Text("Last Set")) {
                     HStack {
                         TextField("Weight", value: $weight, format: .number)
                             .keyboardType(.decimalPad)

@@ -17,8 +17,10 @@ struct ExerciseDetailView: View {
         NavigationStack {
             Form {
                 Section(header: Text("Last Set")) {
-                    VStack {
-                        Text("\(exercise.lastRecord.weight, specifier: "%.2f") \(exercise.weightUnit), \(exercise.lastRecord.repetitions) Reps")
+                    HStack {
+                        Text("\(exercise.setHistory.last!.weight, specifier: "%.2f") \(exercise.weightUnit), \(exercise.setHistory.last!.repetitions) Reps")
+                        Spacer()
+                        Text("1RM: \(exercise.setHistory.last!.oneRepMax, specifier: "%.2f") \(exercise.weightUnit)")
                     }
                 }
                 Section {
@@ -26,6 +28,13 @@ struct ExerciseDetailView: View {
                         isPresentingAddSetSheet = true
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
+                }
+                Section {
+                    NavigationLink {
+                        SetHistoryView(exercise: exercise)
+                    } label: {
+                        Text("Set History")
+                    }
                 }
             }
             .navigationTitle(exercise.name)

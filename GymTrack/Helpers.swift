@@ -6,7 +6,10 @@
 //
 
 enum Helpers {
+    /// Calculates the one-rep max using a weighted average of the Epley and Brzycki formulas.
     static func oneRepMax(weight: Double, reps: Int) -> Double {
+        if reps == 0 { return 0.0 }
+        
         let clampedDelta = min(max(reps - 9, -2), 2)
         let epleyFactor = 0.5 + Double(clampedDelta) * 0.25
         let brzyckiFactor = 1.0 - epleyFactor

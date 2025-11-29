@@ -39,7 +39,6 @@ struct ExerciseListView: View {
                     }
                 }
             }
-            
             .fullScreenCover(isPresented: $isPresentingNewExerciseView) {
                 NewExerciseView(isPresented: $isPresentingNewExerciseView)
             }
