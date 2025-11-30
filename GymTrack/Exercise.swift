@@ -9,7 +9,7 @@ import SwiftData
 import Foundation
 
 /// Data structure to store information about a single set performed by the user
-struct SetData: Codable {
+struct SetData: Codable, Comparable {
     let weight: Double
     let repetitions: Int
     let date: Date
@@ -21,6 +21,10 @@ struct SetData: Codable {
         self.date = Date()
         self.oneRepMax = Helpers.oneRepMax(weight: weight, reps: repetitions)
     }
+    
+    static func < (lhs: SetData, rhs: SetData) -> Bool {
+        return lhs.oneRepMax < rhs.oneRepMax
+    }
 }
 
 /// Underlying data model to persistently store and load exercises that were added by the user
@@ -29,7 +33,9 @@ final class Exercise {
     var name: String
     var weightUnit: String
     var weightSteps: Double
-    var setHistory: [SetData]
+    var personalRecord: SetData?
+    
+    private(set) var setHistory: [SetData]
     
     init(name: String,
          weightUnit: String = "kg",
@@ -40,8 +46,24 @@ final class Exercise {
         self.name = name
         self.weightUnit = weightUnit
         self.weightSteps = weightSteps
-        let lastSet = SetData(weight: weight, repetitions: repetitions)
-        self.setHistory = [lastSet]
+        let initialSet = SetData(weight: weight, repetitions: repetitions)
+        self.personalRecord = initialSet
+        self.setHistory = [initialSet]
+    }
+    
+    func addSet(setData: SetData) {
+        setHistory.append(setData)
+        updatePersonalRecord()
+    }
+    
+    private func updatePersonalRecord() {
+        if setHistory.isEmpty {
+            personalRecord = nil
+            return
+        }
+        personalRecord = setHistory.reduce(setHistory.first!) { currentMax, nextSet in
+            return max(currentMax, nextSet)
+        }
     }
 }
 

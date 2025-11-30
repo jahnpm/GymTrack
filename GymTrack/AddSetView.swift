@@ -26,7 +26,7 @@ struct AddSetView: View {
             Section {
                 Button("Submit") {
                     let newSet = SetData(weight: weight, repetitions: repetitions)
-                    exercise.setHistory.append(newSet)
+                    exercise.addSet(setData: newSet)
                     isPresented = false
                 }
             }

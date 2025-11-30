@@ -23,6 +23,13 @@ struct ExerciseDetailView: View {
                         Text("1RM: \(exercise.setHistory.last!.oneRepMax, specifier: "%.2f") \(exercise.weightUnit)")
                     }
                 }
+                Section(header: Text("Personal Record")) {
+                    HStack {
+                        Text("\(exercise.personalRecord!.weight, specifier: "%.2f") \(exercise.weightUnit), \(exercise.personalRecord!.repetitions) Reps")
+                        Spacer()
+                        Text("1RM: \(exercise.personalRecord!.oneRepMax, specifier: "%.2f") \(exercise.weightUnit)")
+                    }
+                }
                 Section {
                     Button("Add Set") {
                         isPresentingAddSetSheet = true
