@@ -62,7 +62,7 @@ final class Exercise {
             return
         }
         personalRecord = setHistory.reduce(setHistory.first!) { currentMax, nextSet in
-            return max(currentMax, nextSet)
+            max(currentMax, nextSet)
         }
     }
 }
